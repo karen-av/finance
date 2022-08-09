@@ -1,4 +1,9 @@
+from logging import PlaceHolder
 import sqlite3
+import helpers
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from app import password
 
 conn = sqlite3.connect("finance1.db")
 cur = conn.cursor()
@@ -45,6 +50,20 @@ conn.commit()
 
 #cur.execute("""INSERT INTO users(username, hash) VALUES('Mike', 'rfrf');""")
 #conn.commit()
+
+username = "ddd"
+password = "eded33/"
+gen_p = generate_password_hash(password, "pbkdf2:sha256")
+
+cur.execute("""INSERT INTO users (username, hash) VALUES( ?, ?)""", ("rerferf", "1231kjkj", ) )
+conn.commit()
 cur.execute("""SELECT * FROM users;""")
 cash = cur.fetchone()
+num = 2
+x = cur.execute("SELECT * FROM users WHERE id = %s" %num).fetchall()
+y = cur.execute("SELECT * FROM users WHERE id = ?", (num,)).fetchall()
+
+print(y)
+print(x)
 print(cash)
+
