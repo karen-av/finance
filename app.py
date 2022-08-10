@@ -173,6 +173,8 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["user_name"] = rows[0]["username"]
+
 
         # Redirect user to home page
         return redirect("/")
@@ -234,6 +236,7 @@ def register():
         
         # Remember which user has logged in
         session["user_id"] = db.execute("SELECT * FROM users WHERE username = ?", username)[0]["id"]
+        session["user_name"] = db.execute("SELECT * FROM users WHERE username = ?", username)[0]["username"]
         # Redirect user to home page
         return redirect("/")
     else:
