@@ -219,11 +219,15 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
-        if checkUsername(username):
+        if not username or checkUsername(username):
             return apology("Invalid username", 403)
-        if  checkPassword(password):
+        if not username or checkUsernameMastContain(username):
+            return apology("Usename not contain symbol from alphabet")
+        if  not password or checkPassword(password):
             return apology("Invalid password", 403)
-        if  password != confirmation:
+        if not password or checkPasswordBadSymbol(password):
+            return apology("Invalid password 2", 403)
+        if  not confirmation or password != confirmation:
             return apology("Invalid confirmation", 403)
         
         # Проверка на существование пользователя
@@ -325,9 +329,11 @@ def password():
         confirmation = request.form.get("confirmation")
 
         # Check password
-        if checkPassword(password):
+        if not password or checkPassword(password):
             return apology("Invalid password", 403)
-        if password != confirmation:
+        if not password or checkPasswordBadSymbol(password):
+            return apology("Invalid password 2", 403)
+        if not confirmation or password != confirmation:
             return apology("Invalid confirmation", 403)
         # Update db
         db.execute("UPDATE users SET hash = ? WHERE id = ?", session["user_id"], generate_password_hash(password, "pbkdf2:sha256"))
@@ -341,38 +347,45 @@ def password():
 #function check password
 def checkPassword(passw):
     symbols = ['!', '@', '#', '$', '%', '&', '?', '-', '+', '=', '~']
-    if passw or len(passw) > 6 or len(passw) < 30:
-        for s in symbols:
-            if s in passw:
-                for p in passw:
-                    if p.isdigit():
-                        for p in passw:
-                            if p.isupper():
-                                for p in passw:
-                                    if p.islower():
-                                        if checkPasswordBadSymbol(passw):
-                                            return False
+    if len(passw) < 6 or len(passw) > 30:
+        return True
+
+    a, b, c, d = 0, 0, 0, 0
+    for s in passw:
+        if s in symbols:
+            a = a+1
+        if s.isdigit():
+            b = b+1
+        if s.isupper():
+            c = c+1
+        if s.islower():
+            d = d+1
+        if a > 0 and b > 0 and c > 0 and d > 0:
+            print(a, b, c, d)
+            return False
+    print(a, b, c, d)
     return True
 
 def checkPasswordBadSymbol(passw):
     symbols = ['!', '@', '#', '$', '%', '&', '?', '-', '+', '=', '~']
     for p in passw:
-        if p not in symbols:
-            if not p.isdigit():
-                if not p.isupper():
-                    if not p.islower():
-                        return False
-    return True
+        if p not in symbols and not p.isdigit() and not p.isupper() and not p.islower():
+            return True
+    return False
     
 # functionc check username
 def checkUsername(name):
     if len(name) < 3 or len(name) > 30:
-            return True
+        return True
 
     symbols = ['@', '$', '&','-'];
     for n in name:
-        if not n.isalpha():
-            if not n.isdigit():
-                if not n in symbols:
-                    return True
+        if not n.isalpha() and not n.isdigit() and not n in symbols:
+            return True
     return False
+
+def checkUsernameMastContain(name):
+    for n in name:
+        if n.isalpha():
+            return False
+    return True

@@ -6,22 +6,22 @@
  let arr_symbName = ['@', '$', '&','-'];
 
 function checkPasswordMastContain(word) {
-
+    let a = 0, b = 0, c = 0, d = 0;
     for (let i = 0; i < word.length; i++) {
         if (arr_en.indexOf(word[i]) >= 0){
-            for (let b = 0; b < word.length; b++) {
-                if (arr_EN.indexOf(word[b]) >= 0) {
-                    for (let s = 0; s < word.length; s++) {
-                        if (arr_symb.indexOf(word[s]) >= 0) {
-                            for (let c = 0; c < word.length; c++) {
-                                if (arr_num.indexOf(word[c]) >= 0 ) {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                } 
-            }
+            a++;
+        }
+        else if (arr_EN.indexOf(word[i]) >= 0) {
+            b++
+        }
+        else if (arr_symb.indexOf(word[i]) >= 0) {
+            c++
+        }
+        else if (arr_num.indexOf(word[i]) >= 0 ) {
+            d++
+        }
+        if (a > 0 && b > 0 && c > 0 && d > 0){
+            return false;    
         }
     }
     return true;
@@ -30,17 +30,12 @@ function checkPasswordMastContain(word) {
 function checkPasswordInvalidSymbol(word) {
 
     for (let i = 0; i < word.length; i++) {
-            if (arr_en.indexOf(word[i]) === -1){
-                if (arr_EN.indexOf(word[i]) === -1) {        
-                    if (arr_symb.indexOf(word[i]) === -1){          
-                        if (arr_num.indexOf(word[i]) === -1) {
-                            console.log(word[i])
-                            return true;
-                        }   
-                    }
-                }  
-            }
-        }
+        if (arr_en.indexOf(word[i]) === -1 && arr_EN.indexOf(word[i]) === -1 
+        && arr_symb.indexOf(word[i]) === -1 && arr_num.indexOf(word[i]) === -1) {
+            console.log(word[i])
+            return true;
+        }   
+    }
         return false;    
 }
 
@@ -48,15 +43,19 @@ function checkPasswordInvalidSymbol(word) {
  function checkUsernameInvalidSymbol(word) {
 
     for (let i = 0; i < word.length; i++) {
-        if (arr_en.indexOf(word[i]) === -1){
-            if (arr_EN.indexOf(word[i]) === -1) {        
-                if (arr_symbName.indexOf(word[i]) === -1){          
-                    if (arr_num.indexOf(word[i]) === -1) {
-                        return true;
-                    }   
-                }
-            }  
+        if (arr_en.indexOf(word[i]) === -1 && arr_EN.indexOf(word[i]) === -1 
+        && arr_symbName.indexOf(word[i]) === -1 && arr_num.indexOf(word[i]) === -1) {
+            return true;
         }
     }
     return false;    
+}
+
+function checkUsernameMastContain(word) {
+    for (let i = 0; i < word.length; i++) {
+        if (arr_en.indexOf(word[i]) >= 0 || arr_EN.indexOf(word[i]) >= 0){
+            return false;  
+        }
+    }
+    return true;
 }
