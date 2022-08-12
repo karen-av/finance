@@ -221,7 +221,7 @@ def register():
 
         if not username or checkUsername(username):
             return apology("Invalid username", 403)
-        if not username or checkUsernameMastContain(username):
+        if checkUsernameMastContain(username):
             return apology("Usename not contain symbol from alphabet")
         if  not password or checkPassword(password):
             return apology("Invalid password", 403)
